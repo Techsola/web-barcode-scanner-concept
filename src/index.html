@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Barcode scanning proof of concept</title>
+        <style>
+            body {
+                margin: 0;
+            }
+            #preview {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            #overlay {
+                position: fixed;
+                left: calc(50% - (60% / 2));
+                top: calc(50% - (0.05in / 2));
+                width: 60%;
+                height: 0.05in;
+                background-color: rgba(255, 0, 0, 0.8);
+            }
+        </style>
+    </head>
+    <body>
+        <video autoplay id="preview"></video>
+        <div id="overlay"></div>
+
+        <script>
+            (async function() {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: false,
+                    video: { facingMode: 'environment', width: 3480, height: 2160 },
+                });
+
+                const track = stream.getVideoTracks()[0];
+                const minFocusDistance = track.getCapabilities().focusDistance.min;
+
+                // Try pointsOfInterest?
+                await track.applyConstraints({
+                    advanced: [{
+                        focusMode: 'manual',
+                        focusDistance: minFocusDistance,
+                        // Roughly matches the width of the red overlay with the width of a barcode that would be in
+                        // best focus, to help guide the user to hold the phone at the right distance for fixed focus.
+                        zoom: 18 * minFocusDistance,
+                    }],
+                });
+
+                document.getElementById('preview').srcObject = stream;
+            })();
+        </script>
+    </body>
+</html>
