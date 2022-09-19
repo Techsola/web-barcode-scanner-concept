@@ -33,20 +33,6 @@
                     video: { facingMode: 'environment', width: 3480, height: 2160 },
                 });
 
-                const track = stream.getVideoTracks()[0];
-                const minFocusDistance = track.getCapabilities().focusDistance.min;
-
-                // Try pointsOfInterest?
-                await track.applyConstraints({
-                    advanced: [{
-                        focusMode: 'manual',
-                        focusDistance: minFocusDistance,
-                        // Roughly matches the width of the red overlay with the width of a barcode that would be in
-                        // best focus, to help guide the user to hold the phone at the right distance for fixed focus.
-                        zoom: 18 * minFocusDistance,
-                    }],
-                });
-
                 document.getElementById('preview').srcObject = stream;
             })();
         </script>
