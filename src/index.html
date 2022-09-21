@@ -20,20 +20,59 @@
                 height: 0.05in;
                 background-color: rgba(255, 0, 0, 0.8);
             }
+            #result {
+                position: fixed;
+                left: calc(50% - (80% / 2));
+                width: 80%;
+                top: 1in;
+                text-align: center;
+                background: white;
+                font: 0.5in sans-serif;
+                padding: 0.1in
+            }
         </style>
     </head>
     <body>
         <video autoplay id="preview"></video>
         <div id="overlay"></div>
+        <div id="result">No result</div>
 
-        <script>
+        <script type="module">
+            import { DecodeHintType, BarcodeFormat, NotFoundException } from '@zxing/library';
+            import { BrowserMultiFormatReader } from '@zxing/browser';
+
             (async function() {
                 const stream = await navigator.mediaDevices.getUserMedia({
                     audio: false,
                     video: { facingMode: 'environment', width: 3480, height: 2160 },
                 });
 
-                document.getElementById('preview').srcObject = stream;
+                const previewElement = document.getElementById('preview');
+                const resultElement = document.getElementById('result');
+
+                previewElement.srcObject = stream;
+
+                const reader = new BrowserMultiFormatReader();
+                reader.setHints(new Map([
+                    [DecodeHintType.POSSIBLE_FORMATS, [
+                        BarcodeFormat.UPC_A,
+                        BarcodeFormat.UPC_E,
+                        BarcodeFormat.CODE_39,
+                        BarcodeFormat.CODE_93,
+                        BarcodeFormat.CODE_128,
+                    ]],
+                ]));
+
+                let tries = 0;
+                const controls = await reader.decodeFromStream(stream, previewElement, (result, error, controls) => {
+                    tries++;
+                    if (result)
+                        resultElement.innerText = tries + ': ' + BarcodeFormat[result.format] + ' ' + result.text;
+                    else if (error instanceof NotFoundException)
+                        resultElement.innerText = tries + ': ' + 'No result';
+                    else
+                        console.error(error);
+                });
             })();
         </script>
     </body>
