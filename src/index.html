@@ -6,7 +6,7 @@
             body {
                 margin: 0;
             }
-            #preview {
+            #preview video {
                 position: fixed;
                 width: 100%;
                 height: 100%;
@@ -33,47 +33,9 @@
         </style>
     </head>
     <body>
-        <video autoplay id="preview"></video>
+        <div id="preview"></div>
         <div id="overlay"></div>
         <div id="result">No result</div>
-
-        <script type="module">
-            import { DecodeHintType, BarcodeFormat, NotFoundException } from '@zxing/library';
-            import { BrowserMultiFormatReader } from '@zxing/browser';
-
-            (async function() {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    audio: false,
-                    video: { facingMode: 'environment', width: 3480, height: 2160 },
-                });
-
-                const previewElement = document.getElementById('preview');
-                const resultElement = document.getElementById('result');
-
-                previewElement.srcObject = stream;
-
-                const reader = new BrowserMultiFormatReader();
-                reader.setHints(new Map([
-                    [DecodeHintType.POSSIBLE_FORMATS, [
-                        BarcodeFormat.UPC_A,
-                        BarcodeFormat.UPC_E,
-                        BarcodeFormat.CODE_39,
-                        BarcodeFormat.CODE_93,
-                        BarcodeFormat.CODE_128,
-                    ]],
-                ]));
-
-                let tries = 0;
-                const controls = await reader.decodeFromStream(stream, previewElement, (result, error, controls) => {
-                    tries++;
-                    if (result)
-                        resultElement.innerText = tries + ': ' + BarcodeFormat[result.format] + ' ' + result.text;
-                    else if (error instanceof NotFoundException)
-                        resultElement.innerText = tries + ': ' + 'No result';
-                    else
-                        console.error(error);
-                });
-            })();
-        </script>
+        <script type="module" src="index.js"></script>
     </body>
 </html>
