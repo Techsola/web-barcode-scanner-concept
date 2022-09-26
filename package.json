@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "build": "yarn parcel build --public-url .",
+    "serve": "yarn parcel serve"
+  },
+  "source": "src/index.html",
   "dependencies": {
     "@ericblade/quagga2": "^1.7.4"
   },
