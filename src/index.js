@@ -16,18 +16,29 @@ import Quagga from '@ericblade/quagga2';
         numOfWorkers: navigator.hardwareConcurrency,
     });
 
-    const resultElement = document.getElementById('result');
+    const resultOverlayElement = document.getElementById('result-overlay');
+    const resultDisplayElement = document.getElementById('result-display');
+    const results = new Map();
 
-    let currentTimeout = null;
-    let readCount = 0;
+    document.getElementById('reset').onclick = function() {
+        results.clear();
+        resultOverlayElement.style.display = 'none';
+    };
 
     Quagga.onDetected(function(result) {
-        if (currentTimeout) clearTimeout(currentTimeout);
+        const resultText = `${result.codeResult.format} "<b>${result.codeResult.code}</b>"`;
+        results.set(resultText, (results.get(resultText) || 0) + 1);
 
-        readCount++;
-        resultElement.innerText = readCount + ': ' + result.codeResult.format + ' ' + result.codeResult.code;
+        resultDisplayElement.innerHTML = [...results.entries()]
+            .sort((a, b) => b[1] - a[1])
+            .splice(0, 3)
+            .map(entry => `${entry[0]} (${entry[1]} reads)`)
+            .join('<br>');
 
-        currentTimeout = setTimeout(function() { resultElement.innerText = 'No result'; }, 200);
+        if (resultOverlayElement.style.display == 'none') {
+            resultOverlayElement.style.display = null;
+            if ('vibrate' in navigator) navigator.vibrate(50);
+        }
     });
 
     Quagga.start();
