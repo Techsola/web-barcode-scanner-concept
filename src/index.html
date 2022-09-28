@@ -5,6 +5,7 @@
         <style>
             body {
                 margin: 0;
+                background: black;
             }
             #preview video {
                 position: fixed;
@@ -14,11 +15,10 @@
             }
             #overlay {
                 position: fixed;
-                left: calc(50% - (60% / 2));
-                top: calc(50% - (0.05in / 2));
-                width: 60%;
-                height: 0.05in;
-                background-color: rgba(255, 0, 0, 0.8);
+                top: 36%;
+                left: 10%;
+                width: 80%;
+                height: 28%;
             }
             #result {
                 position: fixed;
@@ -34,7 +34,16 @@
     </head>
     <body>
         <div id="preview"></div>
-        <div id="overlay"></div>
+        <svg id="overlay" viewBox="0 0 400 100">
+            <path fill="white" opacity="0.7" d="
+                M0 0 H30 V10 H10 V30 H0 Z
+                M0 100 H30 V90 H10 V70 H0 Z
+                M400 0 H370 V10 H390 V30 H400 Z
+                M400 100 H370 V90 H390 V70 H400"/>
+            <rect fill="red" opacity="0.7" x="10" y="48" width="380" height="4">
+                <animate attributeName="opacity" values="1;0.4" dur="0.5s" repeatCount="indefinite"/>
+            </rect>
+        </svg>
         <div id="result">No result</div>
         <script type="module" src="index.js"></script>
     </body>
