@@ -4,9 +4,6 @@
     "serve": "yarn parcel serve"
   },
   "source": "src/index.html",
-  "dependencies": {
-    "@ericblade/quagga2": "^1.7.4"
-  },
   "devDependencies": {
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",
