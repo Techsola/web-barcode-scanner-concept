@@ -1,4 +1,5 @@
 import Quagga from '@ericblade/quagga2';
+import BarcodeCollector from './BarcodeCollector';
 
 (async function() {
     const previewContainer = document.getElementById('preview')!;
@@ -18,27 +19,26 @@ import Quagga from '@ericblade/quagga2';
 
     const resultOverlayElement = document.getElementById('result-overlay')!;
     const resultDisplayElement = document.getElementById('result-display')!;
-    const results = new Map<string, number>();
 
-    document.getElementById('reset')!.onclick = function() {
-        results.clear();
-        resultOverlayElement.style.display = 'none';
-    };
+    const barcodeCollector = new BarcodeCollector(
+        results => {
+            resultDisplayElement.innerHTML = results
+                .map(entry => `${entry[0]} (${entry[1]} reads)`)
+                .join('<br>');
 
-    Quagga.onDetected(function(result) {
-        const resultText = `${result.codeResult.format} "<b>${result.codeResult.code}</b>"`;
-        results.set(resultText, (results.get(resultText) || 0) + 1);
+            if (resultOverlayElement.style.display == 'none') {
+                resultOverlayElement.style.display = '';
+                if ('vibrate' in navigator) navigator.vibrate(50);
+            }
+        },
+        () => resultOverlayElement.style.display = 'none',
+    );
 
-        resultDisplayElement.innerHTML = [...results.entries()]
-            .sort((a, b) => b[1] - a[1])
-            .splice(0, 3)
-            .map(entry => `${entry[0]} (${entry[1]} reads)`)
-            .join('<br>');
+    document.getElementById('reset')!.onclick = () => barcodeCollector.reset();
 
-        if (resultOverlayElement.style.display == 'none') {
-            resultOverlayElement.style.display = '';
-            if ('vibrate' in navigator) navigator.vibrate(50);
-        }
+    Quagga.onDetected(result => {
+        if (result.codeResult.code)
+            barcodeCollector.onDetected(result.codeResult.format, result.codeResult.code);
     });
 
     Quagga.start();
