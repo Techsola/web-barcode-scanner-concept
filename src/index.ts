@@ -1,7 +1,7 @@
 import Quagga from '@ericblade/quagga2';
 
 (async function() {
-    const previewContainer = document.getElementById('preview');
+    const previewContainer = document.getElementById('preview')!;
 
     await Quagga.init({
         inputStream: {
@@ -16,11 +16,11 @@ import Quagga from '@ericblade/quagga2';
         numOfWorkers: navigator.hardwareConcurrency,
     });
 
-    const resultOverlayElement = document.getElementById('result-overlay');
-    const resultDisplayElement = document.getElementById('result-display');
-    const results = new Map();
+    const resultOverlayElement = document.getElementById('result-overlay')!;
+    const resultDisplayElement = document.getElementById('result-display')!;
+    const results = new Map<string, number>();
 
-    document.getElementById('reset').onclick = function() {
+    document.getElementById('reset')!.onclick = function() {
         results.clear();
         resultOverlayElement.style.display = 'none';
     };
@@ -36,7 +36,7 @@ import Quagga from '@ericblade/quagga2';
             .join('<br>');
 
         if (resultOverlayElement.style.display == 'none') {
-            resultOverlayElement.style.display = null;
+            resultOverlayElement.style.display = '';
             if ('vibrate' in navigator) navigator.vibrate(50);
         }
     });
