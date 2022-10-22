@@ -21,10 +21,8 @@ import BarcodeCollector from './BarcodeCollector';
     const resultDisplayElement = document.getElementById('result-display')!;
 
     const barcodeCollector = new BarcodeCollector(
-        results => {
-            resultDisplayElement.innerHTML = results
-                .map(entry => `${entry[0]} (${entry[1]} reads)`)
-                .join('<br>');
+        resultHtml => {
+            resultDisplayElement.innerHTML = resultHtml;
 
             if (resultOverlayElement.style.display == 'none') {
                 resultOverlayElement.style.display = '';

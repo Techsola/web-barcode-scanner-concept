@@ -2,7 +2,7 @@ export default class BarcodeCollector {
     private readonly results = new Map<string, number>();
 
     constructor(
-        private readonly showResults: (results: [resultHtml: string, readCount: number][]) => void,
+        private readonly showResults: (resultHtml: string) => void,
         private readonly hideResults: () => void) {
     }
 
@@ -12,9 +12,7 @@ export default class BarcodeCollector {
         const resultText = `${format} "<b>${code}</b>"`;
         this.results.set(resultText, (this.results.get(resultText) || 0) + 1);
 
-        this.showResults([...this.results.entries()]
-            .sort((a, b) => b[1] - a[1])
-            .splice(0, 3));
+        this.showResults([...this.results.entries()].sort((a, b) => b[1] - a[1])[0][0]);
     }
 
     reset() {
