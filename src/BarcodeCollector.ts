@@ -7,6 +7,8 @@ export default class BarcodeCollector {
     }
 
     onDetected(format: string, code: string) {
+        if (code.length == 0) return;
+
         const resultText = `${format} "<b>${code}</b>"`;
         this.results.set(resultText, (this.results.get(resultText) || 0) + 1);
 
