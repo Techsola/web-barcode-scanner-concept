@@ -22,7 +22,9 @@ export default class BarcodeCollector {
         if (!entry) this.results.push(entry = { format, code, readCount: 0 });
         entry.readCount++;
 
-        if (this.mode == BarcodeCollectorMode.Waiting) {
+        if (this.mode == BarcodeCollectorMode.Waiting
+            && this.results.some(r => r.format != 'upc_e' || r.readCount > 1)) {
+
             this.mode = BarcodeCollectorMode.Collecting;
 
             const duration = 700;
