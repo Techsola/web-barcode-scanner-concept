@@ -17,10 +17,12 @@ import BarcodeCollector from './BarcodeCollector';
         numOfWorkers: navigator.hardwareConcurrency,
     });
 
+    const collectionProgressAnimation = document.getElementById('collection-progress') as unknown as SVGAnimationElement;
     const resultOverlayElement = document.getElementById('result-overlay')!;
     const resultDisplayElement = document.getElementById('result-display')!;
 
     const barcodeCollector = new BarcodeCollector(
+        () => collectionProgressAnimation.beginElement(),
         (format, code) => {
             resultDisplayElement.innerHTML = `${format} "<b>${code}</b>"`;
 
