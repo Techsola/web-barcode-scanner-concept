@@ -1,5 +1,5 @@
 export default class BarcodeCollector {
-    private readonly results = new Map<string, number>();
+    private readonly results = new Array<{ readonly resultHtml: string, readCount: number }>();
 
     constructor(
         private readonly showResults: (resultHtml: string) => void,
@@ -9,14 +9,17 @@ export default class BarcodeCollector {
     onDetected(format: string, code: string) {
         if (code.length == 0) return;
 
-        const resultText = `${format} "<b>${code}</b>"`;
-        this.results.set(resultText, (this.results.get(resultText) || 0) + 1);
+        const resultHtml = `${format} "<b>${code}</b>"`;
 
-        this.showResults([...this.results.entries()].sort((a, b) => b[1] - a[1])[0][0]);
+        let entry = this.results.find(r => r.resultHtml == resultHtml);
+        if (!entry) this.results.push(entry = { resultHtml, readCount: 0 });
+        entry.readCount++;
+
+        this.showResults(this.results.sort((a, b) => b.readCount - a.readCount)[0].resultHtml);
     }
 
     reset() {
-        this.results.clear();
+        this.results.length = 0;
         this.hideResults();
     }
 }
