@@ -21,8 +21,8 @@ import BarcodeCollector from './BarcodeCollector';
     const resultDisplayElement = document.getElementById('result-display')!;
 
     const barcodeCollector = new BarcodeCollector(
-        resultHtml => {
-            resultDisplayElement.innerHTML = resultHtml;
+        (format, code) => {
+            resultDisplayElement.innerHTML = `${format} "<b>${code}</b>"`;
 
             if (resultOverlayElement.style.display == 'none') {
                 resultOverlayElement.style.display = '';
