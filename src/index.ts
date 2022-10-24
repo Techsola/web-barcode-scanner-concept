@@ -27,7 +27,11 @@ import BarcodeCollector from './BarcodeCollector';
             collectionProgressAnimation.beginElement();
         },
         (format, code) => {
-            resultDisplayElement.innerHTML = `${format} "<b>${code}</b>"`;
+            const formatDisplay = format.startsWith('code_')
+                ? 'Code ' + format.slice('code_'.length)
+                : format.replace('_', '-').toUpperCase();
+
+            resultDisplayElement.innerHTML = `${formatDisplay} "<b>${code}</b>"`;
             resultOverlayElement.style.display = '';
             if ('vibrate' in navigator) navigator.vibrate(50);
         },
