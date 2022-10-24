@@ -5,6 +5,8 @@ export default class BarcodeCollector {
         readCount: number,
     }>();
 
+    private showingResults = false;
+
     constructor(
         private readonly showCollectionStarting: () => void,
         private readonly showResults: (format: string, code: string) => void,
@@ -12,11 +14,12 @@ export default class BarcodeCollector {
     }
 
     onDetected(format: string, code: string) {
-        if (code.length == 0) return;
+        if (code.length == 0 || this.showingResults) return;
 
         if (this.results.length == 0) {
             this.showCollectionStarting();
             setTimeout(() => {
+                this.showingResults = true;
                 const bestEntry = this.results.sort((a, b) => b.readCount - a.readCount)[0];
                 this.showResults(bestEntry.format, bestEntry.code);
             }, 700);
@@ -28,6 +31,7 @@ export default class BarcodeCollector {
     }
 
     reset() {
+        this.showingResults = false;
         this.results.length = 0;
         this.hideResults();
     }

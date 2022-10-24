@@ -25,11 +25,8 @@ import BarcodeCollector from './BarcodeCollector';
         () => collectionProgressAnimation.beginElement(),
         (format, code) => {
             resultDisplayElement.innerHTML = `${format} "<b>${code}</b>"`;
-
-            if (resultOverlayElement.style.display == 'none') {
-                resultOverlayElement.style.display = '';
-                if ('vibrate' in navigator) navigator.vibrate(50);
-            }
+            resultOverlayElement.style.display = '';
+            if ('vibrate' in navigator) navigator.vibrate(50);
         },
         () => resultOverlayElement.style.display = 'none',
     );
