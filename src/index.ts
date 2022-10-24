@@ -22,7 +22,10 @@ import BarcodeCollector from './BarcodeCollector';
     const resultDisplayElement = document.getElementById('result-display')!;
 
     const barcodeCollector = new BarcodeCollector(
-        () => collectionProgressAnimation.beginElement(),
+        duration => {
+            collectionProgressAnimation.setAttribute('dur', duration + 'ms');
+            collectionProgressAnimation.beginElement();
+        },
         (format, code) => {
             resultDisplayElement.innerHTML = `${format} "<b>${code}</b>"`;
             resultOverlayElement.style.display = '';

@@ -8,7 +8,7 @@ export default class BarcodeCollector {
     private showingResults = false;
 
     constructor(
-        private readonly showCollectionStarting: () => void,
+        private readonly showCollectionStarting: (duration: number) => void,
         private readonly showResults: (format: string, code: string) => void,
         private readonly hideResults: () => void) {
     }
@@ -17,12 +17,13 @@ export default class BarcodeCollector {
         if (code.length == 0 || this.showingResults) return;
 
         if (this.results.length == 0) {
-            this.showCollectionStarting();
+            const duration = 700;
+            this.showCollectionStarting(duration);
             setTimeout(() => {
                 this.showingResults = true;
                 const bestEntry = this.results.sort((a, b) => b.readCount - a.readCount)[0];
                 this.showResults(bestEntry.format, bestEntry.code);
-            }, 700);
+            }, duration);
         }
 
         let entry = this.results.find(r => r.format == format && r.code == code);
