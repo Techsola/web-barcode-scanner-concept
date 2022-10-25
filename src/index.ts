@@ -12,12 +12,23 @@ import BarcodeCollector from './BarcodeCollector';
             collectionProgressAnimation.setAttribute('dur', duration + 'ms');
             collectionProgressAnimation.beginElement();
         },
-        (format, code) => {
+        (format, code, reads) => {
             const formatDisplay = format.startsWith('code_')
                 ? 'Code ' + format.slice('code_'.length)
                 : format.replace('_', '-').toUpperCase();
 
-            resultDisplayElement.innerHTML = `${formatDisplay} "<b>${code}</b>"`;
+            let html = `${formatDisplay} "<b>${code}</b>"`;
+
+            if (new URLSearchParams(window.location.search).get("debug") != null) {
+                html += '<span class="debug">';
+
+                for (const read of reads)
+                    html += `<br>${read.format} "<b>${read.code}</b>" (${read.readCount} reads)`;
+
+                html += '</span>';
+            }
+
+            resultDisplayElement.innerHTML = html;
             resultOverlayElement.style.display = '';
             if ('vibrate' in navigator) navigator.vibrate(50);
         },
