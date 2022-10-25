@@ -1,3 +1,5 @@
+import './array-extensions';
+
 const enum BarcodeCollectorMode { Waiting, Collecting, ShowingResult }
 
 export default class BarcodeCollector {
@@ -35,7 +37,7 @@ export default class BarcodeCollector {
 
     private onCollectionFinished() {
         this.mode = BarcodeCollectorMode.ShowingResult;
-        const bestEntry = this.results.sort((a, b) => b.readCount - a.readCount)[0];
+        const bestEntry = this.results.maxBy(r => r.readCount)!;
         this.showResults(bestEntry.format, bestEntry.code);
     }
 
