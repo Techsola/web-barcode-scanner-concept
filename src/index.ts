@@ -55,7 +55,7 @@ import BarcodeCollector from './BarcodeCollector';
                     : { top: "40%", bottom: "40%" },
             },
             decoder: {
-                readers: ['upc_reader', 'upc_e_reader', 'code_128_reader', 'code_39_reader', 'code_93_reader'],
+                readers: ['upc_reader', 'code_128_reader', 'code_39_reader', 'code_93_reader', 'upc_e_reader'],
             },
             numOfWorkers: navigator.hardwareConcurrency,
         });
