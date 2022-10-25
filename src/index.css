@@ -10,10 +10,10 @@ body {
 }
 #overlay {
     position: fixed;
-    top: 36%;
     left: 10%;
-    width: 80%;
-    height: 28%;
+    width: calc(100% - 2 * 10%);
+    top: 38%;
+    height: calc(100% - 2 * 38%);
 }
 #result-overlay {
     position: fixed;
