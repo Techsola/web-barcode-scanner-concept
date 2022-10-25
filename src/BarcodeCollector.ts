@@ -37,7 +37,9 @@ export default class BarcodeCollector {
 
     private onCollectionFinished() {
         this.mode = BarcodeCollectorMode.ShowingResult;
-        const bestEntry = this.results.maxBy(r => r.readCount)!;
+
+        // Prefer any other barcode before UPC-E due to the high rate of false positives
+        const bestEntry = this.results.maxBy(r => [r.format != 'upc_e', r.readCount])!;
         this.showResults(bestEntry.format, bestEntry.code);
     }
 
