@@ -66,7 +66,7 @@ import BarcodeCollector from './BarcodeCollector';
                     : { top: "40%", bottom: "40%" },
             },
             decoder: {
-                readers: ['upc_reader', 'code_128_reader', 'code_39_reader', 'code_93_reader', 'upc_e_reader'],
+                readers: ['i2of5_reader', 'upc_reader', 'code_128_reader', 'code_39_reader', 'code_93_reader', 'upc_e_reader'],
             },
             frequency: 5,
             numOfWorkers: navigator.hardwareConcurrency,
